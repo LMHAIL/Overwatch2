@@ -111,6 +111,12 @@
   #notice{position:absolute;top:88px;left:50%;transform:translateX(-50%);padding:10px 22px;border-radius:10px;background:rgba(10,16,28,.78);border:1px solid rgba(255,186,72,.4);font-size:15px;font-weight:bold;color:#ffb648;opacity:0;transition:opacity .3s;text-align:center;pointer-events:none;box-shadow:0 6px 20px rgba(0,0,0,.5);}
   #notice.show{opacity:1;}
 
+  /* Creator-worthy polish: progression milestone toast */
+  #legendToast{position:absolute;left:50%;top:28%;transform:translate(-50%,-18px) scale(.94);opacity:0;pointer-events:none;z-index:80;text-align:center;padding:16px 28px;border:1px solid rgba(255,214,90,.7);border-radius:14px;background:linear-gradient(135deg,rgba(10,18,32,.92),rgba(35,25,15,.88));box-shadow:0 0 35px rgba(255,184,72,.25);transition:opacity .35s,transform .35s;min-width:min(340px,90vw);}
+  #legendToast.on{opacity:1;transform:translate(-50%,0) scale(1);}
+  #legendToast .lt-small{font-size:10px;letter-spacing:4px;color:#ffd54a;}
+  #legendToast .lt-title{font-size:clamp(24px,4vw,38px);font-weight:900;letter-spacing:2px;margin:5px 0;text-shadow:0 0 18px rgba(255,180,70,.3);}
+  #legendToast .lt-sub{font-size:13px;color:#c7d5e5;}
   /* Hero select screen */
   .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 30%,#16243f,#05060a 70%);text-align:center;padding:24px 16px;overflow-y:auto;}
   .screen h1{font-size:clamp(2.4rem,8vw,5rem);letter-spacing:6px;background:linear-gradient(90deg,#ffb648,#ff7e5f,#ff5a5a);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 40px rgba(255,126,95,.3);margin-bottom:2px;font-weight:900;line-height:1.05;}
@@ -188,7 +194,12 @@
   #loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#05060a;z-index:50;}
   #loading .bar{width:260px;height:8px;background:#1a2640;border-radius:4px;overflow:hidden;margin-top:14px;}
   #loading .fill{height:100%;width:0;background:linear-gradient(90deg,#ffb648,#ff5a5a);transition:width .3s;}
-  #gameover{display:none;}
+  #gameover{display:none;opacity:0;transition:opacity 1.4s ease;background:radial-gradient(circle at 50% 40%,#263b50,#07101b 75%);}
+  #deathFade{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;z-index:900;transition:opacity 1.8s ease;}
+  #deathFade.fade-in{opacity:1;}
+  #gameover.hospital{background:radial-gradient(circle at 50% 30%,#dce8f1,#657d91 70%);color:#102033;}
+  #gameover.hospital h1{background:linear-gradient(90deg,#16496d,#346e93);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  #gameover.hospital h2{color:#213e55;}
   #gameover h1{background:linear-gradient(90deg,#ff5a5a,#ff9a4a);-webkit-background-clip:text;background-clip:text;color:transparent;}
   .hint{font-size:clamp(.72rem,1.5vw,.8rem);color:#74809a;margin-top:14px;max-width:520px;}
 
@@ -295,12 +306,6 @@
   #adminHint{position:absolute;top:14px;left:50%;transform:translateX(-50%);background:rgba(10,16,28,.85);border:1px solid rgba(255,186,72,.4);border-radius:20px;padding:5px 18px;font-size:.7rem;color:#ffb648;letter-spacing:1px;display:none;pointer-events:none;animation:hintPulse 2s infinite;}
   @keyframes hintPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,186,72,.5);}50%{box-shadow:0 0 0 8px rgba(255,186,72,0);}}
   #adminBadge2{position:absolute;bottom:60px;left:20px;background:linear-gradient(90deg,rgba(255,90,90,.9),rgba(255,186,72,.9));color:#0a0a12;padding:3px 12px;border-radius:12px;font-size:.7rem;font-weight:bold;letter-spacing:1px;display:none;box-shadow:0 4px 14px rgba(255,90,90,.4);animation:hintPulse 1.6s infinite;}
-  /* Boss enemy visual */
-  #bossBar{position:absolute;top:130px;left:50%;transform:translateX(-50%);width:min(440px,80vw);display:none;pointer-events:none;}
-  #bossBar.on{display:block;}
-  #bossBar .bn{font-size:.8rem;letter-spacing:2px;color:#ff5a5a;text-align:center;margin-bottom:4px;text-shadow:0 0 8px #ff5a5a;font-weight:bold;}
-  #bossBarWrap{height:14px;background:rgba(0,0,0,.6);border:1px solid rgba(255,90,90,.5);border-radius:7px;overflow:hidden;}
-  #bossBarFill{height:100%;width:100%;background:linear-gradient(90deg,#ff5a5a,#ff9a4a);transition:width .15s;}
   /* Kill streak */
   #streak{position:absolute;top:160px;left:50%;transform:translateX(-50%);font-size:1.4rem;font-weight:bold;color:#ffd54a;text-shadow:0 0 16px #ff8a4a,0 3px 5px #000;opacity:0;transition:opacity .3s;pointer-events:none;text-align:center;}
   #streak.show{opacity:1;}
@@ -412,11 +417,10 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:8;opaci
     <div class="ss-card">
       <div class="ss-badge">FREE ROAM · SAN ANDREAS-STYLE</div>
       <h1 class="ss-logo">OVERWATCH<span class="ss-accent">: SECONDARY</span></h1>
-      <div class="ss-tagline">YOU START WITH NOTHING</div>
+      <div class="ss-tagline">BUILD YOUR OWN CITY STORY</div>
 
       <p class="ss-intro">
-        No weapons. No abilities. No money. Just you, the streets, and whatever you can take.
-        Find guns on the ground, hold up stores for cash, outrun the cops — or don't.
+        A living sandbox. Find your first ride, explore interiors, build cash, trigger city chaos, escape the heat, and turn a nobody into an urban legend.
       </p>
 
       <div class="ss-features">
@@ -437,23 +441,25 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:8;opaci
         <b>P</b><span>Photo mode · <b>Tab</b> City phone/save · <b>M</b> City map · <b>F12</b> Admin</span>
       </div>
 
-      <div class="ss-hint">You're a civilian with empty pockets. Nobody's coming to save you. Make something happen.</div>
+      <div class="ss-hint">Every run is a story. Make it unforgettable.</div>
       <button class="btn ss-cta" id="startBtn"><span>TAKE TO THE STREETS</span><i class="ss-arrow">→</i></button>
     </div>
   </div>
 
   <div id="phoneOverlay"><div id="phoneCard"><h2>📱 CITY SERVICES</h2><button id="saveBtn">💾 SAVE GAME</button><button id="restoreBtn">↻ RESTORE LAST SAVE</button><button id="phoneClose">CLOSE PHONE · TAB</button><div style="font-size:12px;color:#9fb3c8;margin-top:12px">Save wallet, score, position and vitals locally in this browser.</div></div></div>
+  <div id="deathFade"></div>
   <!-- Game over -->
   <div id="gameover" class="screen">
-    <h1>BUSTED</h1>
-    <h2 id="goSub">The streets took everything you had</h2>
+    <h1 id="goTitle">HOSPITAL</h1>
+    <h2 id="goSub">You wake up in the hospital</h2>
     <div id="goStats" style="color:#d0d8e4;margin-bottom:18px;font-size:1rem;">Score: 0</div>
     <button class="btn" id="respawnBtn">RESPAWN</button>
   </div>
 
   <!-- Admin console + extra overlays -->
-  <div id="bossBar"><div class="bn" id="bossName">BOSS</div><div id="bossBarWrap"><div id="bossBarFill"></div></div></div>
+
   <div id="streak"></div>
+  <div id="legendToast"><div class="lt-small">CITY LEGEND · MILESTONE</div><div class="lt-title" id="legendTitle">STREET LEGEND</div><div class="lt-sub" id="legendSub">Keep making moves</div></div>
   <div id="buyMenu" class="screen" style="display:none;background:rgba(8,12,20,0.92);align-items:center;justify-content:center;">
     <div style="background:linear-gradient(180deg,#161c28,#0c1018);border:2px solid #5dff8a;border-radius:12px;padding:24px 28px;max-width:520px;width:90%;box-shadow:0 0 40px rgba(93,255,138,0.25);">
       <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
@@ -737,6 +743,8 @@ addEventListener('keydown', e=>{
 addEventListener('keyup', e=>{ keys[e.key.toLowerCase()]=false; });
 addEventListener('mousemove', e=>{ if(mouse.locked){ yaw-=e.movementX*0.0022; pitch=clamp(pitch-e.movementY*0.0022,-1.2,0.6); } });
 document.addEventListener('pointerlockchange', ()=>{ mouse.locked=(document.pointerLockElement===renderer.domElement); });
+// Re-lock mouse on gameplay canvas click (e.g. after Esc releases pointer lock).
+document.addEventListener('click', e=>{ if(G.running&&!G.over&&!isTouch()&&!mouse.locked && renderer && renderer.domElement && e.target===renderer.domElement){ renderer.domElement.requestPointerLock&&renderer.domElement.requestPointerLock(); } });
 addEventListener('mousedown', e=>{ if(photoMode){ capturePhoto(); return; } if(mouse.locked){ if(e.button===0) mouse.down=true; if(e.button===2) mouse.rdown=true; } });
 addEventListener('mouseup', e=>{ if(e.button===0) mouse.down=false; if(e.button===2) mouse.rdown=false; });
 addEventListener('contextmenu', e=>e.preventDefault());
@@ -1388,7 +1396,7 @@ function makePed(x,z){
   // legs — hip pivot groups so they swing from the hip
   function makeLeg(side){ const hp=new THREE.Group(); hp.position.set(side*0.13,0.70,0); g.add(hp); const l=new THREE.Mesh(capsule(0.11,0.46), legMat); l.position.y=-0.24; l.castShadow=true; hp.add(l); return hp; }
   const lLeg=makeLeg(-1), rLeg=makeLeg(1);
-  p.parts={lLeg,rLeg,lArm,rArm};
+  p.parts={lLeg,rLeg,lArm,rArm,body,head};
   p.mesh=g; p.mesh.position.set(x,0,z); p.mesh.rotation.y=p.angle; scene.add(p.mesh);
   return p;
 }
@@ -1428,17 +1436,25 @@ function updatePed(p,dt){
   if(!blockedAt(nx,p.z,p.r)) p.x=nx; else p.angle+=Math.PI/2;
   if(!blockedAt(p.x,nz,p.r)) p.z=nz; else p.angle-=Math.PI/2;
   p.x=clamp(p.x,-HALF+1,HALF-1); p.z=clamp(p.z,-HALF+1,HALF-1);
-  // animate limbs — smooth swing + slight body bob so they read as walking, not sliding
-  p.walkPhase+=dt*(p.speed>2.5?12:6.5);
-  const sw=Math.sin(p.walkPhase)*Math.min(0.62,p.speed*0.18);
-  const L=Math.abs(Math.sin(p.walkPhase))*0.055;
+  // Improved gait: stride-dependent swing, subtle knee-like lift, shoulder counter-swing and body sway.
+  const runBlend=clamp((p.speed-2.25)/1.45,0,1);
+  p.walkPhase+=dt*(p.speed>2.5?9.0:5.2);
+  const cycle=Math.sin(p.walkPhase), opposite=Math.sin(p.walkPhase+Math.PI);
+  const stride=clamp(p.speed*0.23,0.12,0.72);
+  const sw=cycle*stride;
+  const smooth=(obj,key,target,k=12)=>{ if(obj) obj[key]=lerp(obj[key]||0,target,Math.min(1,dt*k)); };
   if(p.parts.lLeg){
-    p.parts.lLeg.rotation.x=lerp(p.parts.lLeg.rotation.x, sw, 0.4);
-    p.parts.rLeg.rotation.x=lerp(p.parts.rLeg.rotation.x, -sw, 0.4);
-    p.parts.lArm.rotation.x=lerp(p.parts.lArm.rotation.x, -sw*0.6, 0.4);
-    p.parts.rArm.rotation.x=lerp(p.parts.rArm.rotation.x, sw*0.6, 0.4);
+    smooth(p.parts.lLeg,'rotation.x',sw);
+    smooth(p.parts.rLeg,'rotation.x',-sw);
+    smooth(p.parts.lArm,'rotation.x',-sw*0.68-0.05);
+    smooth(p.parts.rArm,'rotation.x',sw*0.68+0.05);
+    smooth(p.parts.lArm,'rotation.z',-0.025-cycle*0.035);
+    smooth(p.parts.rArm,'rotation.z',0.025+cycle*0.035);
+    if(p.parts.body){ smooth(p.parts.body,'rotation.z',cycle*0.025); smooth(p.parts.body,'position.y',0.95+Math.abs(cycle)*(0.025+runBlend*0.04)); }
+    if(p.parts.head){ smooth(p.parts.head,'rotation.x',-cycle*0.025); smooth(p.parts.head,'rotation.z',-cycle*0.018); }
   }
-  p.mesh.position.set(p.x,L+Math.sin(p.walkPhase*2)*0.018,p.z); p.mesh.rotation.y=p.angle;
+  const bob=Math.abs(cycle)*(0.025+runBlend*0.035);
+  p.mesh.position.set(p.x,bob,p.z); p.mesh.rotation.y += (((p.angle-p.mesh.rotation.y+Math.PI*3)%(Math.PI*2))-Math.PI)*Math.min(1,dt*8);
 }
 function hitPed(p,dmg){
   if(p.dead) return;
@@ -1469,6 +1485,9 @@ function makeGang(x,z){
   return h;
 }
 function updateGangs(dt){
+  // Ambient hostile gang spawning disabled for peaceful free-roam.
+  if(G.gangs){ for(const g of G.gangs){ if(g.mesh) scene.remove(g.mesh); } G.gangs.length=0; }
+  return;
   G.gangs=G.gangs||[];
   // keep ~5 ambient gang members in the world, far from the player so they're encountered, not spawned on top of you
   while(G.gangs.length<5){ const p=pointFarFromPlayer(30,HALF-15); G.gangs.push(makeGang(p.x,p.z)); }
@@ -1562,13 +1581,20 @@ function explodeCar(c){
 const fireList=[];
 function addParticle(p){ const m=new THREE.Mesh(new THREE.SphereGeometry(p.s||0.07,5,4), new THREE.MeshBasicMaterial({color:p.c})); m.position.set(p.x,p.y,p.z); scene.add(m); p.mesh=m; G.particles.push(p); }
 function sparkBurst(x,y,z,c,n=5){ for(let i=0;i<n;i++) addParticle({x,y,z,vx:rand(-5,5),vy:rand(1,5),vz:rand(-5,5),life:rand(.2,.5),c}); }
-function bloodBurst(x,y,z){ for(let i=0;i<6;i++) addParticle({x,y,z,vx:rand(-3,3),vy:rand(1,4),vz:rand(-3,3),life:.4,c:0xa01818}); }
+function bloodBurst(x,y,z){
+  // Stylized arcade impact particles: brief, small red droplets rather than graphic gore.
+  for(let i=0;i<12;i++) addParticle({x,y,z,vx:rand(-4,4),vy:rand(1.2,5),vz:rand(-4,4),life:rand(.28,.62),s:rand(.045,.095),c:pick([0x9b1717,0xb52424,0x721010,0xc53333])});
+  // A short-lived ground splash helps impacts read clearly in the scene.
+  const splash=new THREE.Mesh(new THREE.CircleGeometry(rand(.22,.42),9),new THREE.MeshBasicMaterial({color:0x7d1111,transparent:true,opacity:.65,depthWrite:false}));
+  splash.rotation.x=-Math.PI/2; splash.position.set(x,.035,z); scene.add(splash);
+  G.particles.push({mesh:splash,life:1.8,x,y:.035,z,vx:0,vy:0,vz:0,groundSplash:true});
+}
 function addFire(x,z){ const g=new THREE.Group(); for(let i=0;i<6;i++){ const f=new THREE.Mesh(new THREE.SphereGeometry(rand(0.2,0.5),6,5), new THREE.MeshBasicMaterial({color:i%2?0xff8a3b:0xffd54a,transparent:true,opacity:0.85})); f.position.set(rand(-0.4,0.4),rand(0.2,1.2),rand(-0.4,0.4)); g.add(f); } g.position.set(x,0,z); scene.add(g); fireList.push({x,z,mesh:g,t:0,life:5+rand(0,3)}); }
 function updateParticles(dt){
   for(const p of G.particles){
     if(p.isMuzzle){ p.life-=dt; if(p.mat) p.mat.opacity=clamp(p.life/0.07,0,1)*0.95; }
     else if(p.isMuzzleLight){ p.life-=dt; if(p.muzzleLight) p.muzzleLight.intensity=clamp(p.life/0.06,0,1)*4; }
-    else if(!p.isTracer){ p.x+=p.vx*dt; p.y+=p.vy*dt; p.z+=p.vz*dt; p.vy-=9*dt; p.vx*=0.95; p.vz*=0.95; p.life-=dt; if(p.mesh){ p.mesh.position.set(p.x,p.y,p.z); p.mesh.scale.setScalar(clamp(p.life*3,0.1,1)); } }
+    else if(!p.isTracer){ p.life-=dt; if(p.groundSplash){ if(p.mesh&&p.mesh.material) p.mesh.material.opacity=clamp(p.life/1.8,0,1)*.65; } else { p.x+=p.vx*dt; p.y+=p.vy*dt; p.z+=p.vz*dt; p.vy-=9*dt; p.vx*=0.95; p.vz*=0.95; if(p.mesh){ p.mesh.position.set(p.x,p.y,p.z); p.mesh.scale.setScalar(clamp(p.life*3,0.1,1)); } } }
     else { p.life-=dt; const m=p.tracer||p.mesh; if(m&&m.material) m.material.opacity=clamp(p.life/0.06,0,1); }
   }
   for(let i=G.particles.length-1;i>=0;i--){ const p=G.particles[i]; if(p.life<=0){ const m=p.tracer||p.mesh; if(m) scene.remove(m); if(p.muzzle) scene.remove(p.muzzle); if(p.muzzleLight) scene.remove(p.muzzleLight); G.particles.splice(i,1); } }
@@ -1735,6 +1761,13 @@ function reload(){
 }
 function melee(){ for(const h of G.hostiles){ if(h.dead) continue; if((h.x-player.x)**2+(h.z-player.z)**2<3*3){ damageHostile(h,30); bloodBurst(h.x,1,h.z); } } }
 
+let milestoneShown=new Set();
+function checkCityMilestones(){
+ const milestones=[{n:1,title:'FIRST BLOOD',sub:'You made your mark · +$100',reward:100},{n:5,title:'STREET REGULAR',sub:'Five takedowns · +$300',reward:300},{n:10,title:'CITY MENACE',sub:'Ten takedowns · +$600',reward:600},{n:25,title:'URBAN LEGEND',sub:'Twenty-five takedowns · +$1,500',reward:1500},{n:50,title:'THE CITY KNOWS',sub:'Fifty takedowns · +$3,000',reward:3000}];
+ const m=milestones.find(x=>G.elim===x.n&&!milestoneShown.has(x.n)); if(!m)return; milestoneShown.add(m.n); G.money+=m.reward; updateMoneyHUD();
+ const el=document.getElementById('legendToast'); document.getElementById('legendTitle').textContent=m.title; document.getElementById('legendSub').textContent=m.sub; el.classList.add('on'); sndPickup();
+ clearTimeout(window.legendToastTimer); window.legendToastTimer=setTimeout(()=>el.classList.remove('on'),3200);
+}
 function damageHostile(h,dmg){
   h.hp-=dmg; h.alertT=8; bloodBurst(h.x,1,h.z); sndHit(); showHitmark(); showDamageNum(h.x,1.4,h.z,dmg,false);
   if(h.hp<=0){ killHostile(h); }
@@ -1745,10 +1778,10 @@ function killHostile(h){
   G.abilities[2].charge=clamp(G.abilities[2].charge+G.hero.ult.rate*8,0,G.hero.ult.charge);
   // drop pickup
   if(Math.random()<0.5) spawnPickup(h.x,h.z,pick(['health','armor','ammo']));
-  updateScoreHUD();
+  updateScoreHUD(); checkCityMilestones();
 }
 function damagePlayer(dmg){
-  if(G.over) return;
+  if(G.over || playerDying) return;
   if(G.hero.id==='bastion') dmg*=0.7;
   if(G.armor>0){ const a=Math.min(G.armor,dmg*0.6); G.armor-=a; dmg-=a; }
   G.hp-=dmg; G.hitFlashT=0.4; document.getElementById('vignette').classList.add('hit'); G.shake=Math.max(G.shake,Math.min(0.5,dmg*0.02));
@@ -1839,6 +1872,8 @@ function hostileFire(h,ang){
 
 /* ---------- Hostile waves ---------- */
 function updateWaves(dt){
+  // Street shooter encounters are disabled in this city-life build.
+  return;
   // clean dead hostiles regardless of mission state
   for(let i=G.hostiles.length-1;i>=0;i--){ const h=G.hostiles[i]; if(h.dead){ h.deadT+=dt; if(h.deadT>4){ scene.remove(h.mesh); G.hostiles.splice(i,1); } } }
   if(!G.mission) return;
@@ -1849,6 +1884,7 @@ function updateWaves(dt){
   }
 }
 function spawnWave(){
+  return; // street shooters removed
   // hard cap of 3 active street shooters so you never get swarmed / spawn-killed
   const aliveCount=G.hostiles.filter(h=>!h.dead).length;
   const cap=3;
@@ -1939,24 +1975,52 @@ function cycleRadio(){
 }
 
 /* ---------- Game over / respawn ---------- */
+let playerDying=false;
 function gameOver(){
-  G.over=true; if(mouse.locked) document.exitPointerLock();
-  const el=document.getElementById('gameover'); el.style.display='flex';
-  // drop half your cash on death (GTA hospital fee)
-  const lost=Math.floor(G.money*0.5); G.money-=lost;
-  document.getElementById('goStats').textContent=`Score: ${G.score} · Eliminations: ${G.elim} · Cash: $${G.money} · Time: ${Math.floor(G.time)}s · Lost $${lost}`;
+  if(playerDying || G.over) return;
+  playerDying=true; if(mouse.locked) document.exitPointerLock();
+  // A brief collapse animation: tilt, sink and fade to black before hospital wake-up.
+  if(player.mesh){ player.mesh.rotation.z=Math.PI/2; player.mesh.rotation.x=-0.18; }
+  player.vx=player.vz=player.vy=0; player.bobAmt=0;
+  const fade=document.getElementById('deathFade'); fade.classList.add('fade-in');
+  setTimeout(()=>{
+    G.over=true;
+    // drop half your cash on death (hospital fee)
+    const lost=Math.floor(G.money*0.5); G.money-=lost;
+    const el=document.getElementById('gameover'); el.classList.add('hospital'); el.style.display='flex';
+    document.getElementById('goTitle').textContent='HOSPITAL';
+    document.getElementById('goSub').textContent='You wake up in the hospital';
+    document.getElementById('respawnBtn').textContent='GET BACK TO THE CITY';
+    document.getElementById('goStats').textContent=`Score: ${G.score} · Eliminations: ${G.elim} · Cash: $${G.money} · Time: ${Math.floor(G.time)}s · Hospital fee: $${lost}`;
+    requestAnimationFrame(()=>{el.style.opacity='1';fade.classList.remove('fade-in');});
+  },1800);
 }
 function respawn(){
-  G.over=false; G.hp=G.hero.hp; G.armor=G.hero.armor; G.threat=0; G.threatStars=0;
+  playerDying=false; G.over=false; G.hp=G.hero.hp; G.armor=G.hero.armor; G.threat=0; G.threatStars=0;
   G.wanted=0; G.wantedKnown=false; G.cops.forEach(c=>{if(c.mesh) scene.remove(c.mesh);}); G.cops=[]; G.copCars=[];
   const safe=safeGroundPoint(ROAD0-8,ROAD0-8,player.r); player.x=safe.x; player.z=safe.z; player.vx=0; player.vz=0; player.y=0; player.inCar=null; if(player.mesh) player.mesh.visible=true;
-  document.getElementById('gameover').style.display='none';
+  const overEl=document.getElementById('gameover'); overEl.style.display='none'; overEl.style.opacity='0'; overEl.classList.remove('hospital'); document.getElementById('deathFade').classList.remove('fade-in');
   if(!isTouch()) renderer.domElement.requestPointerLock && renderer.domElement.requestPointerLock();
 }
 
+/* ---------- Ambient city activity ---------- */
+let ambientEventTimer=24;
+const ambientCityEvents=[
+ '🚗 Traffic report: minor fender-bender near an intersection',
+ '🚧 City workers reported road maintenance nearby',
+ '🚑 Emergency services responding across town',
+ '🚌 Bus service running through the downtown route',
+ '🛒 Shops are busy and pedestrians are heading home',
+ '🚦 Traffic backed up at a busy intersection',
+ '📣 Local event bringing extra foot traffic to the streets'
+];
+function updateAmbientCity(dt){
+ ambientEventTimer-=dt;
+ if(ambientEventTimer<=0){ ambientEventTimer=rand(28,52); if(Math.random()<0.72) notice(pick(ambientCityEvents)); }
+}
 /* ---------- Update loop ---------- */
 function update(dt){
-  G.time+=dt; updateInterior(dt);
+  G.time+=dt; updateInterior(dt); updateAmbientCity(dt);
   G.dayTime=(G.dayTime+G.daySpeed*dt*60)%1;
   if(player.enterCool>0) player.enterCool-=dt;
   if(player.fireCool>0) player.fireCool-=dt;
@@ -1986,7 +2050,7 @@ function update(dt){
   if(player.inCar){ updateCarDrive(player.inCar,dt,ix,iz,sprint); player.x=player.inCar.x; player.z=player.inCar.z; }
   else {
     const hackMult=(admin.cheats.speedHack?1.15:1)*clamp(admin.scale,0.65,1.0);
-    const rawSp=G.hero.speed*(isSprinting?G.hero.sprint/G.hero.speed:1)*(player.boostT>0?1.15:1)*hackMult; const baseSp=Math.min(rawSp,isSprinting?1.35:0.62);
+    const rawSp=G.hero.speed*(isSprinting?G.hero.sprint/G.hero.speed:1)*(player.boostT>0?1.15:1)*hackMult; const baseSp=Math.min(rawSp,isSprinting?0.92:0.38);
     if(player.siegeT>0){ // rooted
       player.vx=lerp(player.vx,0,0.3); player.vz=lerp(player.vz,0,0.3);
     } else if(player.dashT>0){
@@ -2000,9 +2064,9 @@ function update(dt){
       if(mag>0.01){
         player.vx=targetVx;
         player.vz=targetVz;
-        const vCap=isSprinting?1.35:0.62; const vNow=Math.hypot(player.vx,player.vz); if(vNow>vCap){player.vx*=vCap/vNow;player.vz*=vCap/vNow;}
+        const vCap=isSprinting?0.92:0.38; const vNow=Math.hypot(player.vx,player.vz); if(vNow>vCap){player.vx*=vCap/vNow;player.vz*=vCap/vNow;}
         // step cadence tracks actual speed
-        player.walkPhase+=dt*(isSprinting?11:7.5)*(mag);
+        player.walkPhase+=dt*(isSprinting?9.2:5.8)*(mag);
       } else {
         player.vx=0;
         player.vz=0;
@@ -2024,9 +2088,9 @@ function update(dt){
     // head bob — vertical bob from walk phase, scales with speed ratio
     const curSp=Math.hypot(player.vx,player.vz);
     const speedRatio=clamp(curSp/Math.max(1,baseSp),0,1.3);
-    player.bobAmt=lerp(player.bobAmt, curSp>0.5?0.04+speedRatio*0.08:0, 0.15);
+    player.bobAmt=lerp(player.bobAmt, curSp>0.18?0.018+speedRatio*(0.035+ (isSprinting?0.035:0)):0, 0.15);
     // footstep cadence — slower stride at the new walk/sprint speeds
-    if(player.onGround && curSp>0.35){ const cadence=2.0+speedRatio*1.6; player.footstepT+=dt*cadence; if(player.footstepT>1){ player.footstepT=0; sndStep(); } }
+    if(player.onGround && curSp>0.18){ const cadence=1.35+speedRatio*(isSprinting?1.3:0.65); player.footstepT+=dt*cadence; if(player.footstepT>1){ player.footstepT=0; sndStep(); } }
   }
 
   // animate player mesh — smooth yaw turn, idle breathing, walk/run cycle, punch, upper-body aim twist
@@ -2036,10 +2100,13 @@ function update(dt){
     if(!player.inCar){
       // smooth turn toward yaw (lerp, not snap) — feels like a person turning
       if(!player.siegeT){
-        const targetYaw=yaw;
+        // Face the camera's horizontal mouse-look direction (not movement direction).
+        // Model's forward axis is offset by 90 degrees in this rig.
+        const targetYaw=yaw-Math.PI/2;
         let diff=targetYaw-player.angle;
-        while(diff>Math.PI) diff-=TAU; while(diff<-Math.PI) diff+=TAU; // shortest arc
-        player.angle+=diff*Math.min(1, dt*12); // ~0.08s to re-orient
+        while(diff>Math.PI) diff-=TAU;
+        while(diff<-Math.PI) diff+=TAU;
+        player.angle+=diff*Math.min(1, dt*20); // responsive, stable mouse-facing turn
       }
       player.mesh.rotation.y=player.angle;
       // lean body sideways based on strafe
@@ -2052,27 +2119,27 @@ function update(dt){
         P.upper.rotation.x=lerp(P.upper.rotation.x||0, aimTwist, 0.2);
       }
       // walk/run cycle — hips swing legs, shoulders swing arms (offset half-cycle), knees & elbows bend
-      const amp=clamp(sp*0.09,0,0.85);
+      const runBlend=clamp((sp-0.38)/0.54,0,1); const amp=clamp(sp*(0.22+runBlend*0.20),0,0.72);
       const sw=Math.sin(player.walkPhase)*amp;
       const swC=Math.cos(player.walkPhase)*amp; // bent-knee phase, peaks mid-stride
       if(P.lLeg){ P.lLeg.rotation.x=lerp(P.lLeg.rotation.x, sw, 0.35); P.rLeg.rotation.x=lerp(P.rLeg.rotation.x, -sw, 0.35); }
       // bend knees so the leg that's lifting forward tucks, the planted one straightens
-      if(P.lKnee){ P.lKnee.rotation.x=lerp(P.lKnee.rotation.x, Math.max(0, sw*0.9+0.15), 0.3); P.rKnee.rotation.x=lerp(P.rKnee.rotation.x, Math.max(0, -sw*0.9+0.15), 0.3); }
+      if(P.lKnee){ P.lKnee.rotation.x=lerp(P.lKnee.rotation.x, Math.max(0, sw*(0.75+runBlend*0.35)+0.08), 0.3); P.rKnee.rotation.x=lerp(P.rKnee.rotation.x, Math.max(0, -sw*(0.75+runBlend*0.35)+0.08), 0.3); }
       // idle breathing + weight shift when standing still; hips bob up/down when walking
       if(sp<0.3){
         const breathe=Math.sin(G.time*1.6)*0.03;
         if(P.upper){ P.upper.position.y=0.95+breathe; P.upper.rotation.z=lerp(P.upper.rotation.z||0, breathe*0.6, 0.1); }
         if(P.head){ P.head.rotation.y=lerp(P.head.rotation.y||0, Math.sin(G.time*0.6)*0.18, 0.05); } // idle look-around
       } else {
-        if(P.upper){ P.upper.position.y=lerp(P.upper.position.y,0.95+Math.abs(Math.sin(player.walkPhase))*0.03, 0.2); P.upper.rotation.z=lerp(P.upper.rotation.z||0,0,0.1); }
+        if(P.upper){ P.upper.position.y=lerp(P.upper.position.y,0.95+Math.abs(Math.sin(player.walkPhase))* (0.025+runBlend*0.045), 0.2); P.upper.rotation.z=lerp(P.upper.rotation.z||0,0,0.1); }
         if(P.head){ P.head.rotation.y=lerp(P.head.rotation.y||0,0,0.1); }
       }
       // arms: left arm swings opposite to legs; right arm holds the gun forward when armed
       const ads = mouse.rdown; // aim-down-sights
       if(P.lArm && P.rArm){
-        P.lArm.rotation.x=lerp(P.lArm.rotation.x, -sw*0.7, 0.3);
+        P.lArm.rotation.x=lerp(P.lArm.rotation.x, -sw*(0.65+runBlend*0.25), 0.3);
         const gunFwd = player.hasGun ? (ads?0.6:(mouse.down?0.5:0.25)) : 0;
-        P.rArm.rotation.x=lerp(P.rArm.rotation.x, gunFwd + sw*0.4, 0.3);
+        P.rArm.rotation.x=lerp(P.rArm.rotation.x, gunFwd + sw*(0.35+runBlend*0.12), 0.3);
       }
       // bend elbows slightly — left arm swings, right arm cradles the gun; tighter bend when aiming
       if(P.lElbow){ P.lElbow.rotation.x=lerp(P.lElbow.rotation.x, Math.max(0, sw*0.5+0.2), 0.3); }
@@ -2245,7 +2312,7 @@ function addWanted(n){
   const before=G.wanted;
   G.wanted=clamp(G.wanted+n,0,5);
   if(G.wanted>0) G.wantedKnown=true; // committing a crime IDs you
-  if(G.wanted>before){ sndAbility(); spawnCopWave(G.wanted); } // rising heat brings more units
+  if(G.wanted>before){ sndAbility(); spawnCopWave(G.wanted); notice(G.wanted>=4?'POLICE RESPONSE: HEAVY UNITS':'CRIME REPORTED · POLICE ALERT'); } // escalating city response
 }
 function spawnCopWave(stars){
   // 1★: foot cops patrol on the ground. 3★: cruisers arrive + spike strips. 5★: helis + tactical vans swarm.
@@ -2680,6 +2747,9 @@ function buildHeroSelect(){
 
 /* ---------- Start game ---------- */
 function startGame(){
+  // Clear any leftover hostile NPCs when entering free roam.
+  if(G.hostiles){ for(const h of G.hostiles){ if(h.mesh) scene.remove(h.mesh); } G.hostiles.length=0; }
+  if(G.gangs){ for(const g of G.gangs){ if(g.mesh) scene.remove(g.mesh); } G.gangs.length=0; }
   selectHero(G.heroIdx);
   resetPlayer();
   buildPlayerMesh();
@@ -2948,21 +3018,6 @@ update=function(dt){
 const _damageHostile2=damageHostile;
 damageHostile=function(h,dmg){ _damageHostile2(h,dmg*admin.dmgMult); };
 
-// Boss enemy — spawn occasionally
-function spawnBoss(){
-  const p=pointFarFromPlayer(60,HALF-15);
-  const boss=makeHostile(p.x,p.z,'heavy');
-  boss.kind='boss'; boss.hp=600; boss.maxHp=600; boss.speed=3; boss.fireRate=0.3; boss.dmg=25; boss.range=90; boss.score=1000;
-  boss.mesh.scale.setScalar(1.6); boss.mesh.children.forEach(c=>{ if(c.material) c.material.color.setHex(0x5a0a0a); });
-  G.hostiles.push(boss);
-  document.getElementById('bossName').textContent='BOSS · WARLORD';
-  document.getElementById('bossBar').classList.add('on');
-  adminNotice('⚠ BOSS INCOMING');
-}
-// update boss bar
-const _updateHUDOrig=updateHUD;
-updateHUD=function(){ _updateHUDOrig(); const boss=G.hostiles.find(h=>h.kind==='boss'&&!h.dead); if(boss){ document.getElementById('bossBarFill').style.width=Math.max(0,boss.hp/boss.maxHp*100)+'%'; } else if(document.getElementById('bossBar').classList.contains('on')){ document.getElementById('bossBar').classList.remove('on'); } };
-
 // Kill streak
 let streakCount=0, streakT=0;
 const _killHostileOrig=killHostile;
@@ -2971,15 +3026,10 @@ killHostile=function(h){
   streakCount++; streakT=4;
   const el=document.getElementById('streak');
   if(streakCount>=2){ el.innerHTML=streakCount+'x KILL STREAK<span class="mult">'+(streakCount>=5?'RAMPAGE':streakCount>=3?'UNSTOPPABLE':'STREAK')+'</span>'; el.classList.add('show'); }
-  if(h.kind==='boss'){ adminNotice('BOSS DEFEATED! +1000'); G.score+=1000; }
+
 };
 const _update2=update;
 update=function(dt){ _update2(dt); if(streakT>0){ streakT-=dt; if(streakT<=0){ streakCount=0; document.getElementById('streak').classList.remove('show'); } } };
-// Spawn a boss every ~90s
-let bossTimer=90;
-const _updateWavesOrig=updateWaves;
-updateWaves=function(dt){ _updateWavesOrig(dt); bossTimer-=dt; if(bossTimer<=0 && !G.hostiles.find(h=>h.kind==='boss')){ spawnBoss(); bossTimer=120+Math.random()*60; } };
-
 // admin hint removed — discover F12 yourself
 const _startGameOrig=startGame;
 startGame=function(){ _startGameOrig(); };
